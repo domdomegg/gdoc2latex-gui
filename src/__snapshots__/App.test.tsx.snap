@@ -1,0 +1,187 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`user journey matches snapshots 1`] = `
+<div>
+  <div>
+    <header>
+      <div>
+        <h1>
+          gdoc2latex GUI
+        </h1>
+        <p>
+          Convert a Google Doc to LaTeX using 
+          <a
+            href="https://github.com/domdomegg/gdoc2latex"
+          >
+            gdoc2latex
+          </a>
+        </p>
+      </div>
+    </header>
+    <section>
+      <h2>
+        Paste in an HTML copy of your Google Doc
+      </h2>
+      <p>
+        Get this from Google Docs with 
+        <span
+          class="highlight"
+        >
+          File ➜ Download ➜ Web page (.html)
+        </span>
+        <br />
+        (you may need to unzip it first). 
+        <button
+          class="linkButton"
+        >
+          Or see an example
+        </button>
+        .
+      </p>
+      <textarea
+        placeholder="<html><head><meta content=\\"text/html; charset=UTF-8\\" http-equiv=\\"content-type\\">..."
+        rows="10"
+      />
+      
+      <button
+        disabled=""
+      >
+        Gimme! Gimme! Gimme! (A LaTeX file)
+      </button>
+    </section>
+  </div>
+</div>
+`;
+
+exports[`user journey matches snapshots 2`] = `
+<div>
+  <div>
+    <header>
+      <div>
+        <h1>
+          gdoc2latex GUI
+        </h1>
+        <p>
+          Convert a Google Doc to LaTeX using 
+          <a
+            href="https://github.com/domdomegg/gdoc2latex"
+          >
+            gdoc2latex
+          </a>
+        </p>
+      </div>
+    </header>
+    <section>
+      <h2>
+        Something went wrong
+      </h2>
+      <p>
+        Make sure that you uploaded a HTML doc, pasted the entire thing in,
+        <br />
+        and formatted your doc as per the gdoc2latex instructions.
+      </p>
+      <p>
+        In case it helps, here's the internal error we got:
+      </p>
+      <textarea
+        readonly=""
+        rows="10"
+      >
+        Error: Cannot read property '0' of undefined
+      </textarea>
+      <br />
+      <button
+        class="linkButton"
+      >
+        Go back
+      </button>
+    </section>
+  </div>
+</div>
+`;
+
+exports[`user journey matches snapshots 3`] = `
+<div>
+  <div>
+    <header>
+      <div>
+        <h1>
+          gdoc2latex GUI
+        </h1>
+        <p>
+          Convert a Google Doc to LaTeX using 
+          <a
+            href="https://github.com/domdomegg/gdoc2latex"
+          >
+            gdoc2latex
+          </a>
+        </p>
+      </div>
+    </header>
+    <section>
+      <h2>
+        Here's your LaTeX:
+      </h2>
+      <textarea
+        readonly=""
+        rows="10"
+      >
+        \\title{\\textbf{Simple doc}}
+\\documentclass[12pt]{article}
+
+\\usepackage[a4paper,left=2.54cm,right=2.54cm,top=2.54cm,bottom=2.54cm]{geometry}
+\\usepackage[T1]{fontenc}
+\\usepackage[utf8]{inputenc}
+\\usepackage{lmodern}
+\\usepackage{parskip}
+\\usepackage{hyperref}
+\\usepackage{graphicx}
+\\usepackage{adjustbox}
+\\usepackage{natbib}
+\\usepackage[dvipsnames]{xcolor}
+\\usepackage{minted}
+
+\\setlength\\parindent{0em}
+
+\\bibliographystyle{abbrvnat}
+\\setcitestyle{super,citesep={,},open={},close={}}
+
+\\definecolor{lightgrey}{rgb}{0.95,0.95,0.95}
+\\setminted{bgcolor=lightgrey}
+\\setmintedinline{bgcolor=lightgrey,escapeinside=||,mathescape=true}
+
+\\renewcommand{\\thefootnote}{\\roman{footnote}}
+
+\\usepackage{titling}
+\\predate{}
+\\date{}
+\\postdate{}
+\\preauthor{}
+\\author{}
+\\postauthor{}
+
+\\setcounter{tocdepth}{1}
+
+\\begin{document}
+
+\\maketitle
+
+
+I am a very simple document
+
+\\bibliography{index}
+
+\\end{document}
+      </textarea>
+      <button>
+        Download
+      </button>
+      <button
+        class="linkButton"
+      >
+        Go back
+      </button>
+    </section>
+  </div>
+</div>
+`;
