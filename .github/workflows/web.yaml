@@ -1,7 +1,9 @@
-name: CI
+# This file is centrally managed
+# https://github.com/domdomegg/domdomegg/blob/master/file-sync/web.yaml
 
-on:
-  push
+name: web
+
+on: push
 
 jobs:
   build:
@@ -9,7 +11,7 @@ jobs:
     timeout-minutes: 10
     strategy:
       matrix:
-        node-version: [14]
+        node-version: [16]
 
     steps:
       - name: Checkout ${{ github.sha }}
@@ -18,16 +20,15 @@ jobs:
         uses: actions/setup-node@v1
         with:
           node-version: ${{ matrix.node-version }}
-
-      - name: 'Install dependencies'
+      - name: "Install dependencies"
         run: npm ci
-      - name: 'Lint'
+      - name: "Lint"
         run: npm run lint --if-present
-      - name: 'Build'
+      - name: "Build"
         run: npm run build --if-present
-      - name: 'Test'
+      - name: "Test"
         run: npm run test --if-present
-      - name: 'Deploy'
+      - name: "Deploy"
         if: github.ref == 'refs/heads/master'
         uses: peaceiris/actions-gh-pages@v3
         with:
