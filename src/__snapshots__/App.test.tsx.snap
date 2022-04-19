@@ -87,7 +87,7 @@ exports[`user journey matches snapshots 2`] = `
         readonly=""
         rows="10"
       >
-        Error: Cannot read property '0' of undefined
+        Error: Cannot read properties of undefined (reading '0')
       </textarea>
       <br />
       <button
