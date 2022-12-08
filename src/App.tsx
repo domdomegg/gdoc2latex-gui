@@ -96,7 +96,11 @@ function catchAndTransformError<T>(fn: () => T): Response<T> {
   try {
     return { accepted: true, result: fn() };
   } catch (err) {
-    return { accepted: false, message: err && err.message ? 'Error: ' + err.message : 'An error occurred converting that document' };
+    if (err && typeof err === "object" && typeof (err as { message?: string }).message === "string") {
+      return { accepted: false, message: (err as { message: string }).message };
+    } else {
+      return { accepted: false, message: 'An error occurred converting that document' };
+    }
   }
 }
 
