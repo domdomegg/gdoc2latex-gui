@@ -1,4 +1,4 @@
-# gdoc2latex-gui [(view live)](https://domdomegg.github.io/gdoc2latex-gui/)
+# gdoc2latex-gui [(view live)](https://adamjones.me/gdoc2latex-gui/)
 
 Web interface for [gdoc2latex](https://github.com/domdomegg/gdoc2latex).
 
