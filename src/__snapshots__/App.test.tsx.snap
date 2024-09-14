@@ -89,6 +89,9 @@ exports[`user journey matches snapshots 2`] = `
       >
         Error: Cannot read properties of undefined (reading '0')
       </textarea>
+      <p>
+        We've also logged the error to the console, where you can see a full stacktrace.
+      </p>
       <br />
       <button
         class="linkButton"
