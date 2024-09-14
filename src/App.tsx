@@ -82,6 +82,7 @@ const OutputView = ({ setDisplay, gdoc }: { setDisplay: (display: "input" | "out
       <p>Make sure that you uploaded a HTML doc, pasted the entire thing in,<br/>and formatted your doc as per the gdoc2latex instructions.</p>
       <p>In case it helps, here's the internal error we got:</p>
       <textarea value={response.message} rows={10} readOnly></textarea>
+      <p>We've also logged the error to the console, where you can see a full stacktrace.</p>
       <br/>
       <button className="linkButton" onClick={() => setDisplay('input')}>Go back</button>
     </section>
@@ -96,6 +97,7 @@ function catchAndTransformError<T>(fn: () => T): Response<T> {
   try {
     return { accepted: true, result: fn() };
   } catch (err) {
+    console.error(err);
     return { accepted: false, message: err && err.message ? 'Error: ' + err.message : 'An error occurred converting that document' };
   }
 }
