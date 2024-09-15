@@ -2,6 +2,8 @@ import './App.css';
 import gdoc2latex from 'gdoc2latex';
 import React, { useEffect, useState } from 'react';
 import { exampleGdoc } from './exampleGdoc';
+import DragDropFile from './DragDropFile';
+import { unzipSync } from 'fflate';
 
 const App = () => {
   const [gdoc, setGdoc] = useState('');
@@ -15,19 +17,49 @@ const App = () => {
           <p>Convert a Google Doc to LaTeX using <a href="https://github.com/domdomegg/gdoc2latex">gdoc2latex</a></p>
         </div>
       </header>
-      {display === "input" ? <InputView setDisplay={setDisplay} gdoc={gdoc} setGdoc={setGdoc} /> : <OutputView setDisplay={setDisplay} gdoc={gdoc} />}
+      {display === "input"
+        ? <InputView setDisplay={setDisplay} gdoc={gdoc} setGdoc={setGdoc} />
+        : <OutputView setDisplay={setDisplay} gdoc={gdoc} />}
     </div>
   );
 }
 
 const InputView = ({ setDisplay, gdoc, setGdoc }: { setDisplay: (display: "input" | "output") => void, gdoc: string, setGdoc: (str: string) => void }) => {
+  const handleFiles = async (fileList: FileList) => {
+    try {
+      const html = await getHtmlFromFileList(fileList);
+      setGdoc(html);
+      setDisplay('output');
+    } catch (err) {
+      alert('Error: ' + (err instanceof Error ? err.message : String(err)))
+    }
+  }
+
   return (
     <section>
-      <h2>Paste in an HTML copy of your Google Doc</h2>
-      <p>Get this from Google Docs with <span className="highlight">File ➜ Download ➜ Web page (.html)</span><br/>(you may need to unzip it first). <button className="linkButton" onClick={() => { setGdoc(exampleGdoc); setDisplay('output') }}>Or see an example</button>.</p>
-      <textarea autoFocus value={gdoc} rows={10} onChange={e => setGdoc(e.target.value)} onKeyDown={e => { if (e.key === "Enter") { setDisplay('output') } }} placeholder="<html><head><meta content=&quot;text/html; charset=UTF-8&quot; http-equiv=&quot;content-type&quot;>..."></textarea>
+      <DragDropFile handleFiles={handleFiles} />
+      <h2>Drag or paste in an HTML copy of your Google Doc</h2>
+      <p>
+        Get this from Google Docs with <span className="highlight">File ➜ Download ➜ Web page (.html)</span><br/>
+        <button className="linkButton" onClick={() => { setGdoc(exampleGdoc); setDisplay('output') }}>Or see an example</button>.
+      </p>
+      <input id="file_input" type="file" accept="text/html, application/zip" onChange={e => e.target.files && handleFiles(e.target.files)} />
+      <button onClick={() => document.getElementById('file_input')?.click()} style={{ marginTop: "40px" }}>Upload file</button>
+      <div className='or-bar'>
+        <div></div>
+        <p>OR</p>
+        <div></div>
+      </div>
+      <textarea
+        autoFocus
+        value={gdoc}
+        rows={10}
+        onChange={e => setGdoc(e.target.value)}
+        onKeyDown={e => { if (e.key === "Enter") { setDisplay('output') } }}
+        placeholder="<html><head><meta content=&quot;text/html; charset=UTF-8&quot; http-equiv=&quot;content-type&quot;>..."
+      />
       {gdoc && !gdoc.startsWith('<html>') && <p>This doesn't start with <code>&lt;html&gt;</code>. Sure you have pasted in the HTML, not the doc itself?</p>}
-      <button disabled={!gdoc.trim().length} onClick={() => setDisplay('output')}>Gimme! Gimme! Gimme! (A LaTeX file)</button>
+      {gdoc && <button onClick={() => setDisplay('output')}>Gimme! Gimme! Gimme! (A LaTeX file)</button>}
     </section>
   );
 }
@@ -98,8 +130,53 @@ function catchAndTransformError<T>(fn: () => T): Response<T> {
     return { accepted: true, result: fn() };
   } catch (err) {
     console.error(err);
-    return { accepted: false, message: err && err.message ? 'Error: ' + err.message : 'An error occurred converting that document' };
+    return {
+      accepted: false,
+      message: err instanceof Error
+        ? 'Error: ' + err.message
+        : 'An error occurred converting that document'
+    };
   }
+}
+
+const getHtmlFromFileList = async (fileList: FileList): Promise<string> => {
+  if (fileList.length !== 1) {
+    throw new Error('Please select exactly one file.');
+  }
+
+  const file = fileList[0];
+  const fileName = file.name.toLowerCase();
+
+  if (file.type !== "application/zip" && file.type !== "text/html") {
+    throw new Error('Please select either a ZIP or HTML file.');
+  }
+
+  if (file.type === "application/zip") {
+    const arrayBuffer = await file.arrayBuffer();
+    const uint8Array = new Uint8Array(arrayBuffer);
+    const unzipped: { [path: string]: Uint8Array } = unzipSync(uint8Array);
+
+    const htmlFiles = Object.keys(unzipped).filter(path => path.toLowerCase().endsWith('.html'));
+
+    if (htmlFiles.length === 0) {
+      throw new Error('No HTML file found in the ZIP archive.');
+    }
+
+    if (htmlFiles.length > 1) {
+      throw new Error('Multiple HTML files found in the ZIP archive.');
+    }
+
+    const htmlContent = new TextDecoder().decode(unzipped[htmlFiles[0]]);
+    return htmlContent;
+  }
+
+  // Process HTML file
+  if (fileName.endsWith('.html')) {
+    return await file.text();
+  }
+
+  // This should never be reached due to earlier checks, but TypeScript might complain without it
+  throw new Error('Unexpected file type.');
 }
 
 export default App;

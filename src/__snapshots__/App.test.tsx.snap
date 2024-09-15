@@ -19,8 +19,11 @@ exports[`user journey matches snapshots 1`] = `
       </div>
     </header>
     <section>
+      <div
+        class="file-area"
+      />
       <h2>
-        Paste in an HTML copy of your Google Doc
+        Drag or paste in an HTML copy of your Google Doc
       </h2>
       <p>
         Get this from Google Docs with 
@@ -30,7 +33,6 @@ exports[`user journey matches snapshots 1`] = `
           File ➜ Download ➜ Web page (.html)
         </span>
         <br />
-        (you may need to unzip it first). 
         <button
           class="linkButton"
         >
@@ -38,16 +40,31 @@ exports[`user journey matches snapshots 1`] = `
         </button>
         .
       </p>
+      <input
+        accept="text/html, application/zip"
+        id="file_input"
+        type="file"
+      />
+      <button
+        style="margin-top: 40px;"
+      >
+        Upload file
+      </button>
+      <div
+        class="or-bar"
+      >
+        <div />
+        <p>
+          OR
+        </p>
+        <div />
+      </div>
       <textarea
         placeholder="<html><head><meta content=\\"text/html; charset=UTF-8\\" http-equiv=\\"content-type\\">..."
         rows="10"
       />
       
-      <button
-        disabled=""
-      >
-        Gimme! Gimme! Gimme! (A LaTeX file)
-      </button>
+      
     </section>
   </div>
 </div>
