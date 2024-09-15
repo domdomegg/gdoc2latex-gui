@@ -1,10 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 
 const DragDropFile: React.FC<React.PropsWithChildren<{
   handleFiles: (files: FileList) => void,
 }>> = ({ children, handleFiles }) => {
   const [drag, setDrag] = useState(false);
-  let dragCounter = 0;
+  const dragCounterRef = useRef(0);
 
   const handleDrag = useCallback((e) => {
     e.preventDefault();
@@ -14,20 +14,20 @@ const DragDropFile: React.FC<React.PropsWithChildren<{
   const handleDragIn = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    dragCounter++;
+    dragCounterRef.current++;
     if (e.dataTransfer.items && e.dataTransfer.items.length > 0) {
       setDrag(true);
     }
-  }, []);
+  }, [dragCounterRef]);
 
   const handleDragOut = useCallback((e) => {
     e.preventDefault();
     e.stopPropagation();
-    dragCounter--;
-    if (dragCounter === 0) {
+    dragCounterRef.current--;
+    if (dragCounterRef.current === 0) {
       setDrag(false);
     }
-  }, []);
+  }, [dragCounterRef]);
 
   const handleDrop = useCallback((e) => {
     e.preventDefault();
@@ -36,7 +36,7 @@ const DragDropFile: React.FC<React.PropsWithChildren<{
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       handleFiles(e.dataTransfer.files);
       e.dataTransfer.clearData();
-      dragCounter = 0;
+      dragCounterRef.current = 0;
     }
   }, [handleFiles]);
 
