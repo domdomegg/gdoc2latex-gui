@@ -2,6 +2,7 @@
   "name": "gdoc2latex-gui",
   "version": "0.1.0",
   "private": true,
+  "license": "AGPL-3.0-only",
   "dependencies": {
     "@craco/craco": "^7.0.0",
     "@testing-library/jest-dom": "^5.12.0",
